@@ -52,7 +52,7 @@ jobs:
         aws-region: us-west-2
     - name: Zip Artifact
       run: |
-          cd OrganizationSolution/Source/App/Gepgraphy.Serverless && dotnet restore
+          dotnet restore
           zip -r GeographyServerless.zip out    
     - name: Copy Artifact to S3
       run: aws s3 cp GeographyServerless.zip s3://rsystems-demo1238/
