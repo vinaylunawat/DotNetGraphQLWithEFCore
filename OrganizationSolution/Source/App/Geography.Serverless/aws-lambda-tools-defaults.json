@@ -9,7 +9,7 @@
   "region": "us-west-2",
   "configuration": "Release",
   "s3-prefix": "Geography.Serverless/",
-  "template": "",
+  "template": "serverless.template",
   "template-parameters": "",
   "s3-bucket": "graphqllambdasbucketsforefcore",
   "stack-name": "graphql-serverless-stack-efcore"
