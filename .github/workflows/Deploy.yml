@@ -61,7 +61,7 @@ jobs:
       run: |
             aws lambda create-function \
             --function-name final-test \
-            --runtime dotnetcore6 \
+            --runtime dotnetcore6.0 \
             --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
             --zip-file fileb://./GeographyServerless.zip \
             --role arn:aws:iam::751111534101:role/final-test \
