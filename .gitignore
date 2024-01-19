@@ -396,3 +396,4 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+/OrganizationSolution/Source/App/Geography.Serverless/.config/dotnet-tools.json
