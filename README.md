@@ -1,1 +1,1 @@
-# DotNetGraphQLWithEFCore
+# DotNetGraphQLWithEFCore1
