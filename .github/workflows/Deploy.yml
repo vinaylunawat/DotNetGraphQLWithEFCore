@@ -1,9 +1,7 @@
 name: .NET
 on:
   push:
-    branches: [ 1main ]
-  pull_request:
-    branches: [ 1main ]
+    branches: [ main ]
 defaults:
   run:
     working-directory: ./OrganizationSolution/Source/App/Geography.Serverless
@@ -13,9 +11,10 @@ jobs:
     env: 
       working-directory: ./OrganizationSolution/Source/App/Geography.Serverless
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       ASPNETCORE_ENVIRONMENT: "Production"      
       AWSConfigurationOptions__DbConnectionString: ${{secrets.DbConnectionString}}
+      
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -34,16 +33,25 @@ jobs:
       with:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2   
+        aws-region: us-west-2
     - name: AWS CLI
       run: dotnet tool install -g Amazon.Lambda.Tools
     - name: Restore dependencies
       run: dotnet restore Geography.Serverless.csproj
     - name: Build
-      run: dotnet build --no-restore Geography.Serverless.csproj         
-    #- name: test cases
-      #working-directory: ./OrganizationSolution/Source/Test/Geography.ServerlessTests
-     #run: dotnet test Geography.ServerlessTests.csproj --environment ASPNETCORE_ENVIRONMENT="Production"
-    - name: Deploy to Lambda
-      working-directory: ./OrganizationSolution/Source/App/Geography.Serverless
-      run: dotnet lambda deploy-serverless
+      run: dotnet build --no-restore Geography.Serverless.csproj
+    - name: Publish
+      run: |
+           dotnet publish -c Release -o out
+           ls    
+    - name: Upload to S3
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+    - name: Zip Artifact
+      run: zip -r GeographyServerless.zip out    
+    - name: Copy Artifact to S3
+      run: aws s3 cp GeographyServerless.zip s3://rsystems-demo1238/
+    - run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api  --zip-file=fileb://GeographyServerless.zip 
