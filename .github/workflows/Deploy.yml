@@ -60,7 +60,7 @@ jobs:
     - name: deploy to lambda
       run: |
             aws lambda create-function \
-            --function-name final-test \
+            --function-name flambda \
             --runtime dotnet6 --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
             --zip-file fileb://./GeographyServerless.zip \
             --role arn:aws:iam::751111534101:role/service-role/flambda-role-ljfet37r \
