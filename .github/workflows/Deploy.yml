@@ -34,16 +34,17 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
-    - name: AWS CLI
+    - name: dotnet tool install
       run: dotnet tool install -g Amazon.Lambda.Tools
     - name: Restore dependencies
       run: dotnet restore Geography.Serverless.csproj
     - name: Build
-      run: dotnet build --no-restore Geography.Serverless.csproj
+      run: dotnet build Geography.Serverless.csproj
     - name: Publish
       run: |
            dotnet publish -c Release -o out
            ls    
+           dotnet lambda package
     - name: Upload to S3
       uses: aws-actions/configure-aws-credentials@v1
       with:
@@ -51,7 +52,7 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
     - name: Zip Artifact
-      run: zip -r GeographyServerless.zip out    
+      run:  zip -r GeographyServerless.zip out    
     - name: Copy Artifact to S3
       run: aws s3 cp GeographyServerless.zip s3://rsystems-demo1238/
      #- run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api LambdaEnvVariables --environment "Variables={AWSConfigurationOptions__DbConnectionString=${{secrets.DbConnectionString}}}" --zip-file=fileb://GeographyServerless.zip
