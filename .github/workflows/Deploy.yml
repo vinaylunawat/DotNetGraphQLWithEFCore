@@ -51,5 +51,5 @@ jobs:
       run: |
             aws lambda update-function-code \
             --function-name Hackathon-Serverless-Api \
-            --zip-file fileb://./GeographyServerless.zip \
+            --zip-file fileb://./publish \
             --region us-west-2
