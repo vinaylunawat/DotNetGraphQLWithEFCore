@@ -53,8 +53,8 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
     - name: Zip Artifact
-      run:  zip -r GeographyServerless.zip ./publish   
-    - name: Copy Artifact to S3
-      run: aws s3 cp GeographyServerless.zip s3://rsys123/ 
+      run:  zip -r test123.zip ./publish   
+    #- name: Copy Artifact to S3
+     # run: aws s3 cp GeographyServerless.zip s3://rsys123/ 
      #- run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api LambdaEnvVariables --environment "Variables={AWSConfigurationOptions__DbConnectionString=${{secrets.DbConnectionString}}}" --zip-file=fileb://GeographyServerless.zip
-    - run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api --zip-file=fileb://GeographyServerless.zip
+    - run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api --zip-file=fileb://test123.zip
