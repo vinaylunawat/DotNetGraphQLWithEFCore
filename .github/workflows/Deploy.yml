@@ -61,6 +61,5 @@ jobs:
       run: |
             aws lambda update-function-code \
             --function-name flambda \
-            --runtime dotnet6 --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
             --zip-file fileb://./GeographyServerless.zip \
             --region us-west-2
