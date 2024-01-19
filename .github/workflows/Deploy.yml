@@ -63,6 +63,6 @@ jobs:
             --function-name final-test \
             --runtime dotnetcore3.1 \
             --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
-            --zip-file fileb://./publish/GeographyServerless.zip \
+            --zip-file fileb://./GeographyServerless.zip \
             --role arn:aws:iam::751111534101:role/final-test \
             --region us-west-2
