@@ -58,7 +58,7 @@ jobs:
       run: aws s3 cp test123.zip s3://rsys123/ 
      #- run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api LambdaEnvVariables --environment "Variables={AWSConfigurationOptions__DbConnectionString=${{secrets.DbConnectionString}}}" --zip-file=fileb://GeographyServerless.zip
     - run: aws lambda update-function-code \
-           --function-name=Hackathon-Serverless-Api \
+           --function-name Hackathon-Serverless-Api \
            --runtime dotnetcore6 \
            --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
-           --zip-file=fileb://test123.zip
+           --zip-file fileb://test123.zip
