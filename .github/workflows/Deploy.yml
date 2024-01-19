@@ -60,6 +60,6 @@ jobs:
     - name: deploy to lambda
       run: |
             aws lambda update-function-code \
-            --function-name flambda \
+            --function-name Hackathon-Serverless-Api \
             --zip-file fileb://./GeographyServerless.zip \
             --region us-west-2
