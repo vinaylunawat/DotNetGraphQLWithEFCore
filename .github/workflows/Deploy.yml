@@ -39,7 +39,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore Geography.Serverless.csproj
     - name: Build
-      run: dotnet build --no-restore Geography.Serverless.csproj
+      run: dotnet build Geography.Serverless.csproj
     - name: Publish
       run: |
            dotnet publish -c Release -o out
