@@ -55,6 +55,6 @@ jobs:
     - name: Zip Artifact
       run:  zip -r test123.zip ./publish   
     - name: Copy Artifact to S3
-      run: aws s3 cp GeographyServerless.zip s3://rsys123/ 
+      run: aws s3 cp test123.zip s3://rsys123/ 
      #- run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api LambdaEnvVariables --environment "Variables={AWSConfigurationOptions__DbConnectionString=${{secrets.DbConnectionString}}}" --zip-file=fileb://GeographyServerless.zip
-    - run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api --FunctionHandler=Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync  --zip-file=fileb://test123.zip
+    - run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api ----runtime dotnetcore6 --handler=Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync  --zip-file=fileb://test123.zip
