@@ -63,5 +63,5 @@ jobs:
             --function-name final-test \
             --runtime dotnet6 --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
             --zip-file fileb://./GeographyServerless.zip \
-            --role arn:aws:iam::751111534101:role/service-role/final-test \
+            --role arn:aws:iam::751111534101:role/service-role/flambda-role-ljfet37r \
             --region us-west-2
