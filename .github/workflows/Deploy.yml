@@ -13,8 +13,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       ASPNETCORE_ENVIRONMENT: "Production"      
-      AWSConfigurationOptions__DbConnectionString: ${{secrets.DbConnectionString}}
-      updated_env_vars: "{AWSConfigurationOptions__DbConnectionString=$AWSConfigurationOptions__DbConnectionString}"
+      AWSConfigurationOptions__DbConnectionString: ${{secrets.DbConnectionString}}      
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -67,8 +66,7 @@ jobs:
         aws lambda update-function-configuration \
         --function-name Hackathon-Serverless-Api \
         --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \        
-        --environment Variables=$updated_env_vars
-        
+        --environment Variables="{AWSConfigurationOptions__DbConnectionString=$AWSConfigurationOptions__DbConnectionString}"        
         aws lambda update-function-code \
         --function-name Hackathon-Serverless-Api \  
         --s3-bucket hackathondotnet \
