@@ -13,8 +13,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       ASPNETCORE_ENVIRONMENT: "Production"      
-      AWSConfigurationOptions__DbConnectionString: ${{secrets.DbConnectionString}}
-      
+      AWSConfigurationOptions__DbConnectionString: ${{secrets.DbConnectionString}}      
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
@@ -23,6 +22,7 @@ jobs:
         dotnet-version: 6.0.x
     - name: Install AWS CLI v2
       run: |
+          echo $updated_env_vars
           curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
           unzip -q /tmp/awscliv2.zip -d /tmp
           rm /tmp/awscliv2.zip
@@ -63,11 +63,11 @@ jobs:
     - name: Copy Artifact to S3
       run: aws s3 cp geography.zip s3://hackathondotnet/      
     - run: |
-        #aws lambda update-function-configuration \
-        #--function-name Hackathon-Serverless-Api \
-        #--environment Variables="{Application__ConnectionString=123}"
-        
+        aws lambda update-function-configuration \
+        --function-name Hackathon-Serverless-Api \
+        --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
+        --environment Variables="{Application__ConnectionString=$AWSConfigurationOptions__DbConnectionString}"
         aws lambda update-function-code \
         --function-name Hackathon-Serverless-Api \
         --s3-bucket hackathondotnet \
-        --s3-key geography.zip   
+        --s3-key geography.zip
