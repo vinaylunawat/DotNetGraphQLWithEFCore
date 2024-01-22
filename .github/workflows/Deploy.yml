@@ -65,8 +65,8 @@ jobs:
     - run: |
         aws lambda update-function-configuration \
         --function-name Hackathon-Serverless-Api \
-        --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync
-        #--environment Variables="{Application__ConnectionString=$AWSConfigurationOptions__DbConnectionString}"
+        --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
+        --environment Variables="{Application__ConnectionString=$AWSConfigurationOptions__DbConnectionString}"
         aws lambda update-function-code \
         --function-name Hackathon-Serverless-Api \
         --s3-bucket hackathondotnet \
