@@ -67,7 +67,7 @@ jobs:
         aws lambda update-function-configuration \
         --function-name Hackathon-Serverless-Api \
         --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \        
-        --environment "{\"Variables\": $updated_env_vars}"
+        --environment Variables= {$updated_env_vars}"
         
         aws lambda update-function-code \
         --function-name Hackathon-Serverless-Api \  
