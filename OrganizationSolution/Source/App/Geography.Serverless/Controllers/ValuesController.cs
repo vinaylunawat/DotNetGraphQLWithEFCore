@@ -1,4 +1,5 @@
 ﻿using Framework.Service.Utilities.Criteria;
+using Geography.Business.Country.Manager;
 using Geography.DataAccess.Repository;
 using Microsoft.AspNetCore.Mvc;
 using NuGet.Protocol.Core.Types;
@@ -10,18 +11,27 @@ namespace Geography.Serverless.Controllers
     public class ValuesController : ControllerBase
     {
         private readonly ICountryRepository _countryRepository;
+        private readonly ILogger<ValuesController> _logger;
 
-        public ValuesController(ICountryRepository countryRepository)
+        public ValuesController(ICountryRepository countryRepository, ILogger<ValuesController> logger)
         {
             _countryRepository = countryRepository;
+            _logger = logger;
         }
         // GET api/values
         [HttpGet]
         public async Task<ActionResult<IEnumerable<string>>> Get()
         {
-            FilterCriteria<Entity.Entities.Country> filterCriteria = new FilterCriteria<Entity.Entities.Country>();
-            filterCriteria.Includes.Add(item => item.States);
-            var countries = await _countryRepository.FetchByCriteriaAsync(filterCriteria).ConfigureAwait(false);
+            try
+            {
+                FilterCriteria<Entity.Entities.Country> filterCriteria = new FilterCriteria<Entity.Entities.Country>();
+                filterCriteria.Includes.Add(item => item.States);
+                var countries = await _countryRepository.FetchByCriteriaAsync(filterCriteria).ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error");
+            }
 
             return new string[] { "value1", "value21" };
         }
