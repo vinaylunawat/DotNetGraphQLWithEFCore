@@ -65,7 +65,7 @@ jobs:
     - run: |
         aws lambda update-function-configuration \
         --function-name Hackathon-Serverless-Api \
-        --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \        
+        --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
         --environment Variables="{AWSConfigurationOptions__DbConnectionString=$AWSConfigurationOptions__DbConnectionString}"
         
         aws lambda update-function-code \
