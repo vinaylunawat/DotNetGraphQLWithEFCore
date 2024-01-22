@@ -42,8 +42,9 @@ jobs:
       run: dotnet build Geography.Serverless.csproj
     - name: Publish
       run: |
-           dotnet publish -c Release -o publish
-           ls    
+           ls
+           dotnet publish -c Release -r linux-x64 -o publish
+           ls publish
            dotnet lambda package
     - name: Upload to S3
       uses: aws-actions/configure-aws-credentials@v1
@@ -52,15 +53,21 @@ jobs:
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: us-west-2
     - name: Zip Artifact
-      run:  zip -r GeographyServerless.zip ./publish/    
+      run:  |
+           find ./ -mindepth 1 -maxdepth 1 ! -name publish -type d -exec rm -r {} +
+           cd publish 
+           mv * ./../ 
+           cd ..
+           rm -rf publish/
+           zip -r geography.zip ./*
     - name: Copy Artifact to S3
-      run: aws s3 cp GeographyServerless.zip s3://rsys123/ 
-     #- run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api LambdaEnvVariables --environment "Variables={AWSConfigurationOptions__DbConnectionString=${{secrets.DbConnectionString}}}" --zip-file=fileb://GeographyServerless.zip
-    #- run: aws lambda update-function-code --function-name=Hackathon-Serverless-Api --zip-file=fileb://GeographyServerless.zip
-    - name: deploy to lambda
-      run: |
-            aws lambda update-function-code \
-            --function-name flambda \
-            --runtime dotnet6 --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
-            --zip-file fileb://./GeographyServerless.zip \
-            --region us-west-2
+      run: aws s3 cp geography.zip s3://hackathondotnet/      
+    - run: |
+        #aws lambda update-function-configuration \
+        #--function-name Hackathon-Serverless-Api \
+        #--environment Variables="{Application__ConnectionString=123}"
+        
+        aws lambda update-function-code \
+        --function-name Hackathon-Serverless-Api \
+        --s3-bucket hackathondotnet \
+        --s3-key geography.zip   
