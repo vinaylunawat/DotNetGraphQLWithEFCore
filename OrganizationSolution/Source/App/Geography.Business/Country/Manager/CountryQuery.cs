@@ -40,13 +40,21 @@ namespace Geography.Business.Country.Manager
 
         private async Task<IEnumerable<Entity.Entities.Country>> ResolveCountries(ICountryRepository repository)
         {
-            _logger.LogInformation("Inside ResolveCountries");
-            _logger.LogInformation($"ConnectionString {_applicationOptions.ConnectionString}");
-            FilterCriteria<Entity.Entities.Country> filterCriteria = new FilterCriteria<Entity.Entities.Country>();
-            filterCriteria.Includes.Add(item => item.States);
-            var countries = await repository.FetchByCriteriaAsync(filterCriteria).ConfigureAwait(false);
-            _logger.LogInformation("End ResolveCountries");
-            return countries;
+            try
+            {
+                _logger.LogInformation("Inside ResolveCountries");
+                _logger.LogInformation($"ConnectionString {_applicationOptions.ConnectionString}");
+                FilterCriteria<Entity.Entities.Country> filterCriteria = new FilterCriteria<Entity.Entities.Country>();
+                filterCriteria.Includes.Add(item => item.States);
+                var countries = await repository.FetchByCriteriaAsync(filterCriteria).ConfigureAwait(false);
+                _logger.LogInformation("End ResolveCountries");
+                return countries;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error");
+                return null;
+            }
         }
 
         private static Func<IResolveFieldContext<object>, Task<object>> ResolveCountry(ICountryRepository repository)
