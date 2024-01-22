@@ -6,6 +6,7 @@ using Geography.DataAccess;
 using Geography.DataAccess.Repository;
 using GraphQL;
 using GraphQL.Types;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
@@ -16,10 +17,12 @@ namespace Geography.Business.Country.Manager
     public class CountryQuery : ITopLevelQuery
     {
         private readonly ICountryRepository _countryRepository;
+        private readonly ILogger<CountryQuery> _logger;
 
-        public CountryQuery(ICountryRepository countryRepository)
+        public CountryQuery(ICountryRepository countryRepository, ILogger<CountryQuery> logger)
         {
             _countryRepository = countryRepository;
+            _logger = logger;
         }
         public void RegisterField(ObjectGraphType graphType)
         {
@@ -32,11 +35,13 @@ namespace Geography.Business.Country.Manager
             );
         }
 
-        private static async Task<IEnumerable<Entity.Entities.Country>> ResolveCountries(ICountryRepository repository)
+        private async Task<IEnumerable<Entity.Entities.Country>> ResolveCountries(ICountryRepository repository)
         {
+            _logger.LogInformation("Inside ResolveCountries");
             FilterCriteria<Entity.Entities.Country> filterCriteria = new FilterCriteria<Entity.Entities.Country>();
             filterCriteria.Includes.Add(item => item.States);
             var countries = await repository.FetchByCriteriaAsync(filterCriteria).ConfigureAwait(false);
+            _logger.LogInformation("End ResolveCountries");
             return countries;
         }
 
