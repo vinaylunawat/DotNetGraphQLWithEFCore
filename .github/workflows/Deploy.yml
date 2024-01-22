@@ -65,7 +65,7 @@ jobs:
     - run: |
         aws lambda update-function-configuration \
         --function-name Hackathon-Serverless-Api \
-        --environment Variables="{Application__ConnectionString=Password=admin123;Persist Security Info=False;User ID=admin;Initial Catalog=geography;Data Source=hackathon.c4puznz318vl.us-west-2.rds.amazonaws.com,1433;TrustServerCertificate=true}"         
+        --environment Variables="{Application__ConnectionString=123}"
         aws lambda update-function-code \
         --function-name Hackathon-Serverless-Api \
         --s3-bucket hackathondotnet \
