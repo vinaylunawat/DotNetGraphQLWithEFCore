@@ -14,7 +14,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       ASPNETCORE_ENVIRONMENT: "Production"      
       AWSConfigurationOptions__DbConnectionString: ${{secrets.DbConnectionString}}
-      updated_env_vars: "{AWSConfigurationOptions__DbConnectionString:$AWSConfigurationOptions__DbConnectionString}"
+      updated_env_vars: "{AWSConfigurationOptions__DbConnectionString:$AWS_SECRET_ACCESS_KEY}"
     steps:
     - uses: actions/checkout@v2
     - name: Setup .NET
