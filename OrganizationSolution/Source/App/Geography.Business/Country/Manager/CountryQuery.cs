@@ -1,4 +1,5 @@
-﻿using Framework.Configuration.Models;
+﻿using Amazon.Runtime.Internal.Transform;
+using Framework.Configuration.Models;
 using Framework.DataAccess.Repository;
 using Framework.Service.Utilities.Criteria;
 using Geography.Business.Country.Types;
@@ -53,6 +54,7 @@ namespace Geography.Business.Country.Manager
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error");
+                return null;
                 return null;
             }
         }
