@@ -66,9 +66,10 @@ jobs:
         aws lambda update-function-configuration \
         --function-name Hackathon-Serverless-Api \
         --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
-        --environment Variables="{Application__ConnectionString=123}"
+        --environment Variables="{Application__ConnectionString= ${{ secrets.AWS_ACCESS_KEY_ID }},AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}}"
+        
         
         aws lambda update-function-code \
-        --function-name Hackathon-Serverless-Api \
+        --function-name Hackathon-Serverless-Api \  
         --s3-bucket hackathondotnet \
         --s3-key geography.zip   
