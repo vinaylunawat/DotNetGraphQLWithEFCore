@@ -1,4 +1,5 @@
-﻿using Framework.DataAccess.Repository;
+﻿using Framework.Configuration.Models;
+using Framework.DataAccess.Repository;
 using Framework.Service.Utilities.Criteria;
 using Geography.Business.Country.Types;
 using Geography.Business.GraphQL;
@@ -18,11 +19,13 @@ namespace Geography.Business.Country.Manager
     {
         private readonly ICountryRepository _countryRepository;
         private readonly ILogger<CountryQuery> _logger;
+        private readonly ApplicationOptions _applicationOptions;
 
-        public CountryQuery(ICountryRepository countryRepository, ILogger<CountryQuery> logger)
+        public CountryQuery(ICountryRepository countryRepository, ILogger<CountryQuery> logger, ApplicationOptions options)
         {
             _countryRepository = countryRepository;
             _logger = logger;
+            _applicationOptions = options;
         }
         public void RegisterField(ObjectGraphType graphType)
         {
@@ -38,6 +41,7 @@ namespace Geography.Business.Country.Manager
         private async Task<IEnumerable<Entity.Entities.Country>> ResolveCountries(ICountryRepository repository)
         {
             _logger.LogInformation("Inside ResolveCountries");
+            _logger.LogInformation($"ConnectionString {_applicationOptions.ConnectionString}");
             FilterCriteria<Entity.Entities.Country> filterCriteria = new FilterCriteria<Entity.Entities.Country>();
             filterCriteria.Includes.Add(item => item.States);
             var countries = await repository.FetchByCriteriaAsync(filterCriteria).ConfigureAwait(false);
