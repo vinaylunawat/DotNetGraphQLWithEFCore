@@ -66,6 +66,7 @@ jobs:
         aws lambda update-function-configuration \
         --function-name Hackathon-Serverless-Api \
         --environment Variables="{Application__ConnectionString=123}"
+        
         aws lambda update-function-code \
         --function-name Hackathon-Serverless-Api \
         --s3-bucket hackathondotnet \
