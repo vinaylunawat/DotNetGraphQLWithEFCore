@@ -63,19 +63,17 @@ jobs:
     - name: Copy Artifact to S3
       run: aws s3 cp geography.zip s3://hackathondotnet/      
     #- run: |
-    - name: Retrieve Secrets from AWS Secrets Manager
+    - name: Update Lambda Function Configuration
       run: |
           secret_value=$(aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:us-west-2:751111534101:secret:hackathonSecretManager-czMRXK --query 'SecretString' --output text)
           echo "Secret Value: $secret_value"
-    - name: Update Lambda Function Configuration
-      run: |
           secret_variable1=$(echo "$secret_value" | jq -r '.DBConnectionSring')
           #secret_variable2=$(echo "$secret_value" | jq -r '.variable2')
           aws lambda update-function-configuration \
            --function-name Hackathon-Serverless-Api \
            --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
+           --environment Variables="{SECRET_VARIABLE_1=$secret_variable1}"
            #--environment Variables="{Application__ConnectionString=$AWSConfigurationOptions__DbConnectionString}"
-            --environment Variables="{SECRET_VARIABLE_1=${secret_variable1}}"
 
           aws lambda update-function-code \
            --function-name Hackathon-Serverless-Api \
