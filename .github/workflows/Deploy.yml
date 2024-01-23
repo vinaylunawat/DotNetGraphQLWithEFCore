@@ -73,7 +73,7 @@ jobs:
           aws lambda update-function-configuration \
            --function-name Hackathon-Serverless-Api \
            --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
-           --environment Variables="{SECRET_VARIABLE_1=$secret_variable1}"
+           --environment Variables="{Application__ConnectionString=$secret_variable1}"
            #--environment Variables="{Application__ConnectionString=$AWSConfigurationOptions__DbConnectionString}"
 
           aws lambda update-function-code \
