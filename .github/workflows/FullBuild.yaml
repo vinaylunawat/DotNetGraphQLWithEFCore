@@ -43,11 +43,8 @@ jobs:
     - name: dotnet tool install
       run: dotnet tool install -g Amazon.Lambda.Tools
     - name: Publish
-      run: |
-           ls
-           dotnet publish --no-restore --no-build -c Release -r linux-x64 -o publish
-           ls publish
-           dotnet lambda package
+      run: |                     
+           dotnet publish -c Release -r linux-x64 -o publish           
     - name: Upload to S3
       uses: aws-actions/configure-aws-credentials@v1
       with:
