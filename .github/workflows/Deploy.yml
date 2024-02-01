@@ -1,7 +1,7 @@
 name: .NET
 on:
   workflow_dispatch:
-  push:
+  pull_request:
     branches: [ main ]
 defaults:
   run:
@@ -20,64 +20,8 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 6.0.x
-    - name: Install AWS CLI v2
-      run: |
-          echo $updated_env_vars
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o /tmp/awscliv2.zip
-          unzip -q /tmp/awscliv2.zip -d /tmp
-          rm /tmp/awscliv2.zip
-          sudo /tmp/aws/install --update
-          rm -rf /tmp/aws/
-          sudo apt-get update && sudo apt-get install jq -y
-    - name: Configure AWS credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
-    - name: dotnet tool install
-      run: dotnet tool install -g Amazon.Lambda.Tools
+        dotnet-version: 6.0.x        
     - name: Restore dependencies
       run: dotnet restore Geography.Serverless.csproj
     - name: Build
-      run: dotnet build Geography.Serverless.csproj
-    - name: Publish
-      run: |
-           ls
-           dotnet publish -c Release -r linux-x64 -o publish
-           ls publish
-           dotnet lambda package
-    - name: Upload to S3
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-west-2
-    - name: Zip Artifact
-      run:  |
-           find ./ -mindepth 1 -maxdepth 1 ! -name publish -type d -exec rm -r {} +
-           cd publish 
-           mv * ./../ 
-           cd ..
-           rm -rf publish/
-           zip -r geography.zip ./*
-    - name: Copy Artifact to S3
-      run: aws s3 cp geography.zip s3://hackathondotnet/      
-    #- run: |
-    - name: Update Lambda Function Configuration
-      run: |
-          secret_value=$(aws secretsmanager get-secret-value --secret-id arn:aws:secretsmanager:us-west-2:751111534101:secret:hackathonSecretManager-czMRXK --query 'SecretString' --output text)
-          echo "Secret Value: $secret_value"
-          secret_variable1=$(echo "$secret_value" | jq -r '.DBConnectionSring')
-          #secret_variable2=$(echo "$secret_value" | jq -r '.variable2')
-          aws lambda update-function-configuration \
-           --function-name Hackathon-Serverless-Api \
-           --handler Geography.Serverless::Geography.Serverless.LambdaEntryPoint::FunctionHandlerAsync \
-           --environment Variables="{Application__ConnectionString=$secret_variable1}"
-           #--environment Variables="{Application__ConnectionString=$AWSConfigurationOptions__DbConnectionString}"
-
-          aws lambda update-function-code \
-           --function-name Hackathon-Serverless-Api \
-          --s3-bucket hackathondotnet \
-          --s3-key geography.zip
+      run: dotnet build --no-restore Geography.Serverless.csproj    
